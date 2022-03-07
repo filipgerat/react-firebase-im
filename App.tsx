@@ -1,20 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import HomeScreen from './src/components/home/HomeScreen';
+import { UserRepository } from './src/data/UserRepository';
+import { FirebaseUserRepository } from './src/external/FirebaseUserRepository';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+interface IAppContext {
+  userRepository: UserRepository
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const providers = {
+  userRepository: new FirebaseUserRepository()
+}
+
+export const AppContext = React.createContext<IAppContext>(providers);
+
+export default function App() {
+  
+  return (
+    <AppContext.Provider value={providers}>
+      <HomeScreen></HomeScreen>
+    </AppContext.Provider>
+  );
+}
