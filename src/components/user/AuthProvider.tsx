@@ -1,7 +1,7 @@
 import React, {
   PropsWithChildren, useContext, useState,
 } from "react";
-import { AppContext } from "../../../App";
+import AppContext from "../../AppContext";
 import User from "../../data/User";
 
 import AuthContext from "./AuthContext";

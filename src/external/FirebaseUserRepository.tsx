@@ -11,4 +11,15 @@ export class FirebaseUserRepository implements UserRepository {
   onAuthStateChanged(callback: (user: User | null) => void) {
     return auth().onAuthStateChanged(callback);
   }
+  async loginWithEmailAndPassword(email: string, password: string) {
+    try {
+      const userCredential = await auth().signInWithEmailAndPassword(email, password);
+      console.log("Logged in", userCredential)
+    } catch (e) {
+      console.error("Failed to login", e)
+    }
+  }
+  async logout() {
+    return auth().signOut();
+  };
 }
