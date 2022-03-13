@@ -9,7 +9,7 @@ tryouts of either technology or patterns
   - DONE - add to appcontext
   - DONE - getDefault()
   - DONE - create slice that holds active room
-  - Add connectToDefault to HomeScreen
+  - DONE - Add connectToDefault to HomeScreen
   - Create subcollection in firebase which contains messages
   - Add functionality for writing a message
     - Add input field

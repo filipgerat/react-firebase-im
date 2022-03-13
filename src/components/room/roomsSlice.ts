@@ -8,7 +8,7 @@ import Room from "../../data/Room";
 
 const roomsAdapter = createEntityAdapter<Room>();
 
-interface RoomsState {
+export interface RoomsState {
   active: Room | null;
   error: string | null;
 }
@@ -20,7 +20,7 @@ const initialState: RoomsState = roomsAdapter.getInitialState({
 
 export const connectToDefaultRoom = createAsyncThunk<
   Room | null,
-  RoomsState,
+  undefined,
   { extra: { appContext: any } }
 >("rooms/connectToDefaultRoom", async (_, { extra }) => {
   const room = await extra.appContext.connectToDefaultRoom();

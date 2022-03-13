@@ -1,8 +1,9 @@
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
-
 import { configureStore, EnhancedStore } from "@reduxjs/toolkit";
+
+import roomsReducer from "./components/room/roomsSlice"
 import Loading from "./components/Loading";
 import AppContext from "./AppContext";
 
@@ -12,7 +13,9 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const store = configureStore({
-      reducer: {},
+      reducer: {
+        rooms: roomsReducer
+      },
       middleware: [thunk.withExtraArgument({ appContext })],
     });
     setStore(store);
