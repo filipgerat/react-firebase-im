@@ -5,12 +5,16 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./home/HomeScreen";
 import LoginScreen from "./user/LoginScreen";
 import AuthContext from "./user/AuthContext";
+import Loading from "./Loading";
 
 const Stack = createNativeStackNavigator();
 
 export default function Navigation() {
   const auth = useContext(AuthContext);
-  console.log(auth);
+
+  if (auth.status === 'idle' || auth.status === 'loading') {
+    return <Loading/>
+  }
 
   const initialRoute = (auth.user) ? "Home" : "Login"
   return (

@@ -14,8 +14,8 @@ tryouts of either technology or patterns
   - DONE - Add functionality for writing a message
     - DONE - Add input field
     - DONE - Add thunk for posting message
-  - Change display to show messages
+  - DONE - Change display to show messages
     - DONE - Load messages to roomslice
-    - Display on frontend with scrollview
-  - Create proper message senders
+    - DONE - Display on frontend with scrollview
+  - DONE - Create proper message senders
   - Subscribe from message loader

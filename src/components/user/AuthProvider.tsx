@@ -1,20 +1,22 @@
 import React, {
-  PropsWithChildren, useContext, useState,
+  PropsWithChildren, useContext, useEffect, useState,
 } from "react";
-import AppContext from "../../AppContext";
-import User from "../../data/User";
+import { useDispatch, useSelector } from "react-redux";
 
 import AuthContext from "./AuthContext";
+import { listenToAuthChanges, selectUser, selectUserStatus } from "./userSlice";
 
 export default function AuthProvider({ children }: PropsWithChildren<{}>) {
-  const { userRepository } = useContext(AppContext);
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const status = useSelector(selectUserStatus);
 
-  const [user, setUser] = useState<User | null>(userRepository.getCurrentUser());
-
-  userRepository.onAuthStateChanged((user) => setUser(user));
+  useEffect(() => {
+    dispatch(listenToAuthChanges())
+  }, [])
 
   return (
-    <AuthContext.Provider value={{ user }}>
+    <AuthContext.Provider value={{ user, status }}>
       {children}
     </AuthContext.Provider>
   );

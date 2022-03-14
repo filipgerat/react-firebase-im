@@ -7,7 +7,7 @@ import {
 import uuid from "react-native-uuid";
 import { Message, MessageContentBlocks } from "../../data/Message";
 import Room from "../../data/Room";
-import { RoomRepository } from "../../data/RoomRepository";
+import { UserState } from "../user/userSlice";
 
 const roomsAdapter = createEntityAdapter<Room>();
 
@@ -63,7 +63,7 @@ export const addMessage = createAsyncThunk<
 >(
   "rooms/addMessage",
   async (messageContent: MessageContentBlocks, { getState, extra }) => {
-    const state = getState() as { rooms: RoomsState };
+    const state = getState() as { user: UserState, rooms: RoomsState };
     const room = state.rooms.active;
     if (!room) {
       console.warn("addMessage: No active room", state);
@@ -71,8 +71,7 @@ export const addMessage = createAsyncThunk<
     }
     const message = {
       id: uuid.v4(),
-      // TODO: Change this once user is in redux state
-      user: "test",
+      user: state.user.user?.email,
       content: messageContent,
     };
     const result = await extra.appContext.roomRepository.addMessage(
