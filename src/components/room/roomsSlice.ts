@@ -110,10 +110,13 @@ export const roomsSlice = createSlice({
       (state, action: PayloadAction<Message[]>) => {
         state.messages = action.payload;
       }
-    )
+    );
   },
 });
 
 export const { setActiveRoom } = roomsSlice.actions;
 
 export default roomsSlice.reducer;
+
+export const selectMessages = (state: { rooms: RoomsState }) =>
+  state.rooms.messages;
