@@ -69,10 +69,11 @@ export const addMessage = createAsyncThunk<
       console.warn("addMessage: No active room", state);
       return;
     }
-    const message = {
-      id: uuid.v4(),
-      user: state.user.user?.email,
+    const message: Message = {
+      id: uuid.v4().toString(),
+      user: state.user.user?.email || "",
       content: messageContent,
+      createdAt: new Date(),
     };
     const result = await extra.appContext.roomRepository.addMessage(
       room,

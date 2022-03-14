@@ -9,4 +9,5 @@ export type Message = {
     id: string;
     user: string;
     content: MessageContentBlocks
+    createdAt: Date;
 }

@@ -9,7 +9,7 @@ class FirebaseMessageLoader implements MessageLoader {
     this.roomName = roomName    
   }
   async load(): Promise<Message[]> {
-    const snap = await firestore().collection("rooms").doc(this.roomName).collection("messages").get();
+    const snap = await firestore().collection("rooms").doc(this.roomName).collection("messages").orderBy("createdAt").get();
     const docs = snap.docs;
     console.log('loaded messages', docs);
     return docs.map(doc => {
@@ -18,6 +18,7 @@ class FirebaseMessageLoader implements MessageLoader {
         id: data.id,
         content: data.content,
         user: data.user,
+        createdAt: new Date(data?.createdAt)
       }
     });
   }
