@@ -1,8 +1,9 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { addMessage, connectToDefaultRoom, RoomsState } from "../room/roomsSlice";
 import { useDispatch, useSelector } from "react-redux";
+import RoomChat from "../room/RoomChat";
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -13,14 +14,10 @@ export default function HomeScreen() {
     dispatch(connectToDefaultRoom());
   }, [])
 
-  const sendMessage = () => {
-    dispatch(addMessage([{ type: 'text', value: "Example message"}]))
-  }
 
   return (
     <View style={styles.container}>
-      <Text>Example 2!</Text>
-      <Button title="Send message" onPress={sendMessage}></Button>
+      <RoomChat/>
       <StatusBar style="auto" />
     </View>
   );

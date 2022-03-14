@@ -10,8 +10,12 @@ tryouts of either technology or patterns
   - DONE - getDefault()
   - DONE - create slice that holds active room
   - DONE - Add connectToDefault to HomeScreen
-  - Create subcollection in firebase which contains messages
-  - Add functionality for writing a message
-    - Add input field
-    - Add thunk for posting message
+  - DONE - Create subcollection in firebase which contains messages
+  - DONE - Add functionality for writing a message
+    - DONE - Add input field
+    - DONE - Add thunk for posting message
   - Change display to show messages
+    - DONE - Load messages to roomslice
+    - Display on frontend with scrollview
+  - Create proper message senders
+  - Subscribe from message loader
