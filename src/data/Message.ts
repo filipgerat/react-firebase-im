@@ -3,8 +3,10 @@ type MessageContentBlock = {
     value: string;
 }
 
+export type MessageContentBlocks = MessageContentBlock[]
+
 export type Message = {
     id: string;
     user: string;
-    content: MessageContentBlock[]
+    content: MessageContentBlocks
 }

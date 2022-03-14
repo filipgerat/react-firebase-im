@@ -4,7 +4,8 @@ import {
   createSlice,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import { Message } from "../../data/Message";
+import uuid from 'react-native-uuid';
+import { Message, MessageContentBlocks } from "../../data/Message";
 import Room from "../../data/Room";
 import { RoomRepository } from "../../data/RoomRepository";
 
@@ -26,11 +27,11 @@ export const connectToDefaultRoom = createAsyncThunk<
   () => any,
   undefined,
   { extra: { appContext: any } }
->("rooms/connectToDefaultRoom", async (_, { extra }) => {
+>("rooms/connectToDefaultRoom", async (_, { dispatch, extra }) => {
   const subscriber = await extra.appContext.roomRepository.subscribeToRoom(
     "default",
-    (room: any) => {
-      console.log("From subscribtion", room);
+    (room: Room) => {
+      dispatch(setActiveRoom(room))      
     }
   );
   console.log("subscriber", subscriber);
@@ -39,15 +40,21 @@ export const connectToDefaultRoom = createAsyncThunk<
 
 export const addMessage = createAsyncThunk<
   void,
-  Message,
+  MessageContentBlocks,
   { extra: { appContext: any } }
->("rooms/addMessage", async (message: Message, { getState, extra }) => {
+>("rooms/addMessage", async (messageContent: MessageContentBlocks, { getState, extra }) => {
   const state = (getState() as { rooms: RoomsState });
   console.log("IN THUNK", state);
   const room = state.rooms.active;
   if (!room) {
     console.log("No active room", state);
     return;
+  }
+  const message = {
+    id: uuid.v4(),
+    // TODO: Change this once user is in redux state
+    user: 'test',
+    content: messageContent
   }
   const result = await extra.appContext.roomRepository.addMessage(room, message);
   return;
@@ -56,7 +63,12 @@ export const addMessage = createAsyncThunk<
 export const roomsSlice = createSlice({
   name: "rooms",
   initialState,
-  reducers: {},
+  reducers: {
+    setActiveRoom(state, action: PayloadAction<Room>) {
+      console.debug("Setting active room", action.payload);
+      state.active = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(
       connectToDefaultRoom.fulfilled,
@@ -69,5 +81,9 @@ export const roomsSlice = createSlice({
     });
   },
 });
+
+export const {
+  setActiveRoom
+} = roomsSlice.actions;
 
 export default roomsSlice.reducer;
