@@ -13,7 +13,8 @@ const roomsAdapter = createEntityAdapter<Room>();
 
 export interface RoomsState {
   active: Room | null;
-  roomSubscriber: (() => Promise<any>) | null;
+  roomSubscriber: (() => void) | null;
+  messageSubscriber: (() => void) | null;
   error: string | null;
   messages: Message[];
 }
@@ -21,6 +22,7 @@ export interface RoomsState {
 const initialState: RoomsState = roomsAdapter.getInitialState({
   active: null,
   roomSubscriber: null,
+  messageSubscriber: null,
   error: null,
   messages: [],
 });
@@ -34,10 +36,21 @@ export const connectToDefaultRoom = createAsyncThunk<
     "default",
     (room: Room) => {
       dispatch(setActiveRoom(room));
-      dispatch(loadMessages());
+      dispatch(subscribeToMessages(room));
     }
   );
   console.log("subscriber", subscriber);
+  return subscriber;
+});
+
+export const subscribeToMessages = createAsyncThunk<
+  () => void,
+  Room,
+  { extra: { appContext: any } }
+>("rooms/subscribeToMessages", async (room, { dispatch, getState }) => {
+  const subscriber = await room.messageLoader.subscribe((messages) => {
+    dispatch(setMessages(messages))
+  });
   return subscriber;
 });
 
@@ -91,6 +104,10 @@ export const roomsSlice = createSlice({
       console.debug("Setting active room", action.payload);
       state.active = action.payload;
     },
+    setMessages(state, action: PayloadAction<Message[]>) {
+      console.debug("Setting messages", action.payload);
+      state.messages = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(
@@ -111,10 +128,16 @@ export const roomsSlice = createSlice({
         state.messages = action.payload;
       }
     );
+    builder.addCase(
+      subscribeToMessages.fulfilled,
+      (state, action: PayloadAction<() => void>) => {
+        state.messageSubscriber = action.payload;
+      }
+    );
   },
 });
 
-export const { setActiveRoom } = roomsSlice.actions;
+export const { setActiveRoom, setMessages } = roomsSlice.actions;
 
 export default roomsSlice.reducer;
 

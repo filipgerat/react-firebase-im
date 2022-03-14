@@ -23,6 +23,23 @@ class FirebaseMessageLoader implements MessageLoader {
     });
   }
 
+  async subscribe(cb: (messages: Message[]) => void): Promise<() => void> {
+    const subscriber = await firestore().collection("rooms").doc(this.roomName).collection("messages").orderBy("createdAt").onSnapshot((snap) => {
+      const messages = snap.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: data.id,
+          content: data.content,
+          user: data.user,
+          createdAt: new Date(data?.createdAt)
+        };
+      });
+      cb(messages);
+    });
+    return subscriber;
+
+  }
+
 }
 
 export class FirebaseRoomRepository implements RoomRepository {
