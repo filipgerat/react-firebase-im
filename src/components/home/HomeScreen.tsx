@@ -11,7 +11,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     dispatch(connectToDefaultRoom());
-  })
+  }, [])
 
   return (
     <View style={styles.container}>
